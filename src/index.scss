@@ -3,3 +3,17 @@ $main-color: pink;
 body {
   background-color: $main-color;
 }
+
+.post-list {
+  &__login-btn {
+    .root--authed & {
+      display: none;
+    }
+  }
+  &__logout-btn {
+    display: none;
+    .root--authed & {
+      display: inline-block;
+    }
+  }
+}

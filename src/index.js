@@ -1,15 +1,16 @@
 import axios from 'axios';
 
 const postAPI = axios.create({});
+const rootEl = document.querySelector('.root');
 // async function index() {
   // await는 항상 비동기 함수 안에서만 쓸 수 있다
 //   await
 // }
 if (localStorage.getItem('token')) {
-  postAPI.defaults.headers['Authorization'] = localStorage.getItem('token');
+  postAPI.defaults.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+  rootEl.classList.add('root--authed');
 }
 // document.querySelector는 느린 메소드, 여러번 하기 않게 미리 캐시해두자
-const rootEl = document.querySelector('.root');
 const templates = {
   postList: document.querySelector('#post-list').content,
   postItem: document.querySelector('#post-item').content,
@@ -33,6 +34,7 @@ async function indexPage() {
   listFragment.querySelector('.post-list__logout-btn').addEventListener('click', e => {
     localStorage.removeItem('token');
     delete postAPI.defaults.headers['Authorization'];
+    rootEl.classList.remove('root--authed');
     indexPage();
   });
 
@@ -92,7 +94,8 @@ async function loginPage() {
     localStorage.setItem('token', res.data.token);
     // defaults
     // 설정 객체의 기본값으로 쓰인다.
-    postAPI.defaults.headers['Authorization'] = res.data.token;
+    postAPI.defaults.headers['Authorization'] = `Bearer ${res.data.token}`;
+    rootEl.classList.add('root--authed');
     indexPage();
   });
   render(fragment);
