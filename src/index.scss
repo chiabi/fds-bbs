@@ -4,16 +4,31 @@ body {
   background-color: $main-color;
 }
 
+.root {
+  background-color: #fff;
+}
 .post-list {
   &__login-btn {
     .root--authed & {
       display: none;
     }
   }
-  &__logout-btn {
+  &__logout-btn, &__new-post-btn {
     display: none;
     .root--authed & {
       display: inline-block;
     }
+  }
+  &__title {
+    padding: 0.5em;
+    background-color: darken($main-color, 30%);
+    color: #fff;
+    font-size: 1.2em;
+    text-align: center;
+  }
+}
+.post-item {
+  &__title {
+    cursor: pointer;
   }
 }
