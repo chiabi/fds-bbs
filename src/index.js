@@ -5,7 +5,9 @@ const postAPI = axios.create({});
   // await는 항상 비동기 함수 안에서만 쓸 수 있다
 //   await
 // }
-
+if (localStorage.getItem('token')) {
+  postAPI.defaults.headers['Authorization'] = localStorage.getItem('token');
+}
 // document.querySelector는 느린 메소드, 여러번 하기 않게 미리 캐시해두자
 const rootEl = document.querySelector('.root');
 const templates = {
@@ -27,6 +29,11 @@ async function indexPage() {
 
   listFragment.querySelector('.post-list__login-btn').addEventListener('click', e => {
     loginPage();
+  });
+  listFragment.querySelector('.post-list__logout-btn').addEventListener('click', e => {
+    localStorage.removeItem('token');
+    delete postAPI.defaults.headers['Authorization'];
+    indexPage();
   });
 
   res.data.forEach(post => {
