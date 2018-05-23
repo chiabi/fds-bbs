@@ -27,6 +27,8 @@
       <button class="post-content__back-btn">뒤로가기</button>
       <h2 class="post-content__title"></h2>
       <p class="post-content__body"></p>
+      <button class="post-content__modify-btn">수정하기</button>
+      <button class="post-content__delete-btn">삭제하기</button>
     </div>
   </template>
 
@@ -48,6 +50,16 @@
       <textarea name="body" class="post-form__body"></textarea>
       <button class="post-form__submit">전송</button>
       <button class="post-form__back-btn">뒤로 가기</button>
+    </form>
+  </template>
+
+  <template id="post-modify-form">
+    <form class="post-modify-form">
+      <h1 class="post-modify-form__header">수정하기</h1>
+      <input name="title" type="text" class="post-modify-form__title">
+      <textarea name="body" class="post-modify-form__body"></textarea>
+      <button class="post-modify-form__submit">수정하기</button>
+      <button class="post-modify-form__cancel">취소하기</button>
     </form>
   </template>
 
