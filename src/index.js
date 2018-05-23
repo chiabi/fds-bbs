@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const postAPI = axios.create({});
+const postAPI = axios.create({
+  // 환경변수로 설정가능
+  // 환경 변수는 빌드시 적용되므로 껐다 키자.
+  baseURL: process.env.API_URL
+});
 const rootEl = document.querySelector('.root');
 // async function index() {
   // await는 항상 비동기 함수 안에서만 쓸 수 있다
@@ -38,7 +42,7 @@ function render(fragment) {
 async function indexPage() {
   // 2. async, await
   // 원래 then()으로 기다리던 것을 await 뒤에 써주면 됨
-  const res = await postAPI.get('http://localhost:3000/posts');
+  const res = await postAPI.get('/posts');
   const listFragment = document.importNode(templates.postList, true);  
 
   listFragment.querySelector('.post-list__login-btn').addEventListener('click', e => {
@@ -72,13 +76,13 @@ async function indexPage() {
   render(listFragment);
   
   // 1. Promise, then()
-  // axios.get('http://localhost:3000/posts').then(res => {
+  // axios.get('/posts').then(res => {
     //   
     // });
   }
   
 async function postContentPage(postId) {
-  const res = await postAPI.get(`http://localhost:3000/posts/${postId}`);
+  const res = await postAPI.get(`/posts/${postId}`);
   const fragment = document.importNode(templates.postContent, true);
   fragment.querySelector(`.post-content__title`).textContent = res.data.title;
   fragment.querySelector(`.post-content__body`).textContent = res.data.body;
@@ -104,7 +108,7 @@ async function loginPage() {
       password: e.target.elements.password.value
     }
     e.preventDefault();
-    const res = await postAPI.post('http://localhost:3000/users/login', payload);
+    const res = await postAPI.post('/users/login', payload);
     login(res.data.token);
     indexPage();
   });
@@ -124,7 +128,7 @@ async function postFormPage() {
       title: e.target.elements.title.value,
       body: e.target.elements.body.value
     }
-    const res = await postAPI.post('http://localhost:3000/posts', payload);
+    const res = await postAPI.post('/posts', payload);
     console.log(res);
     postContentPage(res.data.id);
   });
