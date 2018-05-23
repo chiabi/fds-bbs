@@ -6,10 +6,22 @@ const rootEl = document.querySelector('.root');
   // await는 항상 비동기 함수 안에서만 쓸 수 있다
 //   await
 // }
-if (localStorage.getItem('token')) {
-  postAPI.defaults.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+
+// 로그인 설정 중복 제거
+function login(token) {
+  localStorage.setItem('token', token);
+  // defaults
+  // 설정 객체의 기본값으로 쓰인다.
+  postAPI.defaults.headers['Authorization'] = `Bearer ${token}`;
   rootEl.classList.add('root--authed');
 }
+
+function logout() {
+  localStorage.removeItem('token');
+  delete postAPI.defaults.headers['Authorization'];
+  rootEl.classList.remove('root--authed');
+}
+
 // document.querySelector는 느린 메소드, 여러번 하기 않게 미리 캐시해두자
 const templates = {
   postList: document.querySelector('#post-list').content,
@@ -33,9 +45,7 @@ async function indexPage() {
     loginPage();
   });
   listFragment.querySelector('.post-list__logout-btn').addEventListener('click', e => {
-    localStorage.removeItem('token');
-    delete postAPI.defaults.headers['Authorization'];
-    rootEl.classList.remove('root--authed');
+    logout();
     indexPage();
   });
   listFragment.querySelector('.post-list__new-post-btn').addEventListener('click', e => {
@@ -95,11 +105,7 @@ async function loginPage() {
     }
     e.preventDefault();
     const res = await postAPI.post('http://localhost:3000/users/login', payload);
-    localStorage.setItem('token', res.data.token);
-    // defaults
-    // 설정 객체의 기본값으로 쓰인다.
-    postAPI.defaults.headers['Authorization'] = `Bearer ${res.data.token}`;
-    rootEl.classList.add('root--authed');
+    login(res.data.token);
     indexPage();
   });
   render(fragment);
@@ -124,6 +130,9 @@ async function postFormPage() {
   });
   render(fragment);
 }
+
+if (localStorage.getItem('token')) {
+  login(localStorage.getItem('token'));
+}
 // loginPage();
 indexPage();
-// postContentPage(1);
