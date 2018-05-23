@@ -1,10 +1,14 @@
-$main-color: pink;
+$main-color: skyblue;
 
 body {
+  margin: 0;
+  padding: 1em;
   background-color: $main-color;
 }
 
 .root {
+  max-width: 600px;
+  margin: 0 auto;
   background-color: #fff;
 }
 .post-list {
@@ -20,6 +24,7 @@ body {
     }
   }
   &__title {
+    margin: 0;
     padding: 0.5em;
     background-color: darken($main-color, 30%);
     color: #fff;
