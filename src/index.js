@@ -105,7 +105,6 @@ async function postContentPage(postId) {
 async function loginPage() {
   const fragment = document.importNode(templates.login, true);
   const formEl = fragment.querySelector('.login__form');
-                                  // ★★★
   formEl.addEventListener('submit', async e => {
     const payload = {
       username: e.target.elements.username.value,
@@ -146,7 +145,7 @@ async function postModifyFormPage(postId) {
   const fragment = document.importNode(templates.postModifyForm, true);
   fragment.querySelector('.post-modify-form__cancel').addEventListener('click', e => {
     e.preventDefault();
-    indexPage();
+    postContentPage(postId);
   });
   const formEl = fragment.querySelector('.post-modify-form');
   formEl.elements.title.value = res.data.title;
