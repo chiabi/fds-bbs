@@ -42,9 +42,11 @@ function render(fragment) {
   rootEl.appendChild(fragment);
 } 
 async function indexPage() {
-  // 2. async, await
-  // 원래 then()으로 기다리던 것을 await 뒤에 써주면 됨
+  
+  // 로딩 추가
+  rootEl.classList.add('root--loading');
   const res = await postAPI.get('/posts?_expand=user');
+  rootEl.classList.remove('root--loading');
   const listFragment = document.importNode(templates.postList, true);  
 
   listFragment.querySelector('.post-list__login-btn').addEventListener('click', e => {
