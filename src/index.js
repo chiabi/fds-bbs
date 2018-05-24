@@ -33,6 +33,8 @@ const templates = {
   postContent: document.querySelector('#post-content').content,
   login: document.querySelector('#login').content,
   postForm: document.querySelector('#post-form').content,
+  comments: document.querySelector('#comments').content,
+  commentItem: document.querySelector('#comment-item').content,
 }
 
 function render(fragment) {
@@ -91,6 +93,23 @@ async function postContentPage(postId) {
   fragment.querySelector(`.post-content__back-btn`).addEventListener('click', e => {
     indexPage();
   });
+
+  // 로그아웃해도 글은 볼 수 있도록
+  if (localStorage.getItem('token')) {
+    // 코멘트 관련
+    const commentsFragment = document.importNode(templates.comments, true);
+    // 코멘트 내용을 서버로부터 불러오자
+    const commentsRes = await postAPI.get(`/posts/${postId}/comments`);
+    // console.log(commentsRes.data);
+    commentsRes.data.forEach(item => {
+      // console.log(item.body);
+      const itemFragment = document.importNode(templates.commentItem, true);
+      itemFragment.querySelector('.comment-item__body').textContent = item.body;
+      commentsFragment.querySelector('.comment__list').appendChild(itemFragment);
+    })
+    fragment.appendChild(commentsFragment);
+  }
+
   render(fragment);
 }
 
