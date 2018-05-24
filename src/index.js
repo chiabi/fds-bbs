@@ -44,7 +44,7 @@ function render(fragment) {
 async function indexPage() {
   // 2. async, await
   // 원래 then()으로 기다리던 것을 await 뒤에 써주면 됨
-  const res = await postAPI.get('/posts');
+  const res = await postAPI.get('/posts?_expand=user');
   const listFragment = document.importNode(templates.postList, true);  
 
   listFragment.querySelector('.post-list__login-btn').addEventListener('click', e => {
@@ -68,6 +68,7 @@ async function indexPage() {
     
     // 최신 웹브라우저에서 지원하는 template을 사용
     const fragment = document.importNode(templates.postItem, true);
+    fragment.querySelector('.post-item__author').textContent = post.user.username;
     const pEl = fragment.querySelector('.post-item__title');
     pEl.textContent = post.title;
     pEl.addEventListener('click', e => {
