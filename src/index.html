@@ -56,6 +56,10 @@
   <!-- 코멘트 목록, 폼 : 동적으로 생성되는 것들은 각자 템플릿으로 만든다. -->
   <template id="comments">
     <div class="comment__list"></div>
+    <form class="comments_form">
+      <input name="body" type="text" class="comments__body-input">
+      <button class="comments_submit-btn">전송</button>
+    </form>
   </template>
   <template id="comment-item">
     <p class="comment-item__body"></p>

@@ -59,14 +59,6 @@ async function indexPage() {
   });
 
   res.data.forEach(post => {
-    // 동적으로 엘리먼트를 만들때
-    // 모두 이런식으로 자바스크립트로 만들어주면 굉장히 불편함
-    
-    // 서버 측 자바스크립트로 전통적 웹 개발에서는 ejs를 사용했다.
-    // 프론트 단에서는 template태그를 사용할 것이다.
-    // const pEl = document.createElement('p');
-    
-    // 최신 웹브라우저에서 지원하는 template을 사용
     const fragment = document.importNode(templates.postItem, true);
     fragment.querySelector('.post-item__author').textContent = post.user.username;
     const pEl = fragment.querySelector('.post-item__title');
@@ -97,17 +89,22 @@ async function postContentPage(postId) {
 
   // 로그아웃해도 글은 볼 수 있도록
   if (localStorage.getItem('token')) {
-    // 코멘트 관련
     const commentsFragment = document.importNode(templates.comments, true);
-    // 코멘트 내용을 서버로부터 불러오자
     const commentsRes = await postAPI.get(`/posts/${postId}/comments`);
-    // console.log(commentsRes.data);
     commentsRes.data.forEach(item => {
-      // console.log(item.body);
       const itemFragment = document.importNode(templates.commentItem, true);
       itemFragment.querySelector('.comment-item__body').textContent = item.body;
       commentsFragment.querySelector('.comment__list').appendChild(itemFragment);
-    })
+    });
+    const formEl = commentsFragment.querySelector('.comments_form');
+    formEl.addEventListener('submit', async e => {
+      e.preventDefault();
+      const payload = {
+        body: e.target.elements.body.value
+      }
+      const res = await postAPI.post(`/posts/${postId}/comments`, payload);
+      postContentPage(postId);
+    });
     fragment.appendChild(commentsFragment);
   }
 

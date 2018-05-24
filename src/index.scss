@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Nanum+Gothic');
-$main-color: #AA3939;
+$main-color: rgb(57, 100, 170);
 $font-stack: 'Nanum Gothic', sans-serif;
 
 body {
@@ -47,6 +47,7 @@ body {
   }
 }
 .post-content {
+  padding: 1em;
   &__modify-btn, &__delete-btn {
     display: none;
     .post-content--author & {
