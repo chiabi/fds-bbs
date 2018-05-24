@@ -93,10 +93,22 @@ async function postContentPage(postId) {
   if (localStorage.getItem('token')) {
     const commentsFragment = document.importNode(templates.comments, true);
     const commentsRes = await postAPI.get(`/posts/${postId}/comments`);
-    commentsRes.data.forEach(item => {
+    commentsRes.data.forEach(comment => {
       const itemFragment = document.importNode(templates.commentItem, true);
-      itemFragment.querySelector('.comment-item__body').textContent = item.body;
+      const bodyEl = itemFragment.querySelector('.comment-item__body');
+      const removeButtonEl = itemFragment.querySelector('.comment-item__remove-btn');
+      bodyEl.textContent = comment.body;
       commentsFragment.querySelector('.comment__list').appendChild(itemFragment);
+      removeButtonEl.addEventListener('click', async e =>{
+        // 낙관적 업데이트
+        // p 태그와 button 태그 삭제
+        bodyEl.remove();
+        removeButtonEl.remove();
+        // delete 요청 보내기
+                                    // /posts/2/comments/2 이런거는 지원하지 않음
+        const res = await postAPI.delete(`/comments/${comment.id}`)
+        // 만약 요청이 실패했을 경우 원상 복구 (생략)
+      });
     });
     const formEl = commentsFragment.querySelector('.comments_form');
     formEl.addEventListener('submit', async e => {
